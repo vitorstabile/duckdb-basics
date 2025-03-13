@@ -5,14 +5,11 @@
 1. [Chapter 1: DuckDB Overview](#chapter1)
     - [Chapter 1 - Part 1: What is DuckDB](#chapter1part1)
 2. [Appendix A: Useful DuckDB Code Snippet](#appendixa)
-    - [Appendix A - Part 1: Setting Up a Python Project and Properly Calling from Command Line](#appendixapart1)
-    - [Appendix A - Part 2: Create a Log file](#appendixapart2)
-    - [Appendix A - Part 3: List all files of a directory based in a extension](#appendixapart3)
-    - [Appendix A - Part 4: List all files of a directory based in a regex](#appendixapart4)
-    - [Appendix A - Part 5: Move file to a directory](#appendixapart5)
-    - [Appendix A - Part 6: Read a Config Json File](#appendixapart6)
-    - [Appendix A - Part 7: Read and Parse a CSV file with Pandas based in a Config Json File](#appendixapart7)
-    - [Appendix A - Part 8: Read a CSV file with Pandas and iteract over the rows with custom functions using apply()](#appendixapart8)
+    - [Appendix A - Part 1: Remove characters from VARCHARS using REGEXP_REPLACE](#appendixapart1)
+    - [Appendix A - Part 2: Check if a column have different values in other column](#appendixapart2)
+    - [Appendix A - Part 3: Check for duplicate lines](#appendixapart3)
+    - [Appendix A - Part 4: Find a character in a VARCHAR field](#appendixapart4)
+    - [Appendix A - Part 5: Split a field and create new columns](#appendixapart5)
     
 ## <a name="chapter1"></a>Chapter 1: DuckDB Overview
 
