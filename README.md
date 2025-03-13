@@ -13,7 +13,7 @@
     
 ## <a name="chapter1"></a>Chapter 1: DuckDB Overview
 
-#### <a name="chapter1part1"></a>Chapter 1 - Part 1: hat is DuckDB
+#### <a name="chapter1part1"></a>Chapter 1 - Part 1: What is DuckDB
 
 ## <a name="appendixa"></a>Appendix A: Useful DuckDB Code Snippet
 
