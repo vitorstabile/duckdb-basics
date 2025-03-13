@@ -10,6 +10,7 @@
     - [Appendix A - Part 3: Check for duplicate lines](#appendixapart3)
     - [Appendix A - Part 4: Find a character in a VARCHAR field](#appendixapart4)
     - [Appendix A - Part 5: Split a field and create new columns](#appendixapart5)
+    - [Appendix A - Part 6: Split a field and aggregate values](#appendixapart6)
     
 ## <a name="chapter1"></a>Chapter 1: DuckDB Overview
 
@@ -224,4 +225,46 @@ WITH pairs AS (
 │          2 │ BB      │         30.00 │ carlos    │
 │          3 │ CC      │         40.00 │ joana     │
 └────────────┴─────────┴───────────────┴───────────┘
+```
+
+ #### <a name="appendixapart5"></a>Appendix A - Part 6: Split a field and aggregate values
+
+ ```
+CREATE TABLE products (sku VARCHAR(10),price DECIMAL(10,2), size VARCHAR(10));
+
+INSERT INTO products (sku, price, size) VALUES
+  ('AA', 20, 'S'),
+  ('AA', 20, 'M'),
+  ('AA', 20, 'L'),
+  ('BB', 30, '38'),
+  ('BB', 30, '39');
+
+SELECT * FROM products;
+
+┌─────────┬───────────────┬─────────┐
+│   sku   │     price     │  size   │
+│ varchar │ decimal(10,2) │ varchar │
+├─────────┼───────────────┼─────────┤
+│ AA      │         20.00 │ S       │
+│ AA      │         20.00 │ M       │
+│ AA      │         20.00 │ L       │
+│ BB      │         30.00 │ 38      │
+│ BB      │         30.00 │ 39      │
+└─────────┴───────────────┴─────────┘
+
+SELECT
+    price AS PRICE,
+    CONCAT(sku,'|',string_agg(TRIM(size), '_' ORDER BY size)) AS ConcatSize
+FROM
+    products
+GROUP BY
+    sku, price;
+
+┌───────────────┬────────────┐
+│     PRICE     │ ConcatSize │
+│ decimal(10,2) │  varchar   │
+├───────────────┼────────────┤
+│         30.00 │ BB|38_39   │
+│         20.00 │ AA|L_M_S   │
+└───────────────┴────────────┘
 ```
