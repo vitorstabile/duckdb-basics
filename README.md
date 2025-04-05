@@ -273,7 +273,7 @@ GROUP BY
 └───────────────┴────────────┘
 ```
 
- #### <a name="appendixapart7"></a>Appendix A - Part 7: Split a field and aggregate values
+ #### <a name="appendixapart7"></a>Appendix A - Part 7: Select just even numbers
 
 ```
 CREATE TABLE EXAMPLE (ID INTEGER,NAME VARCHAR(17),COUNTRYCODE VARCHAR(3), DISTRICT VARCHAR(20), POPULATION INTEGER);
