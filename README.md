@@ -13,6 +13,7 @@
     - [Appendix A - Part 6: Split a field and aggregate values](#appendixapart6)
     - [Appendix A - Part 7: Select just even numbers](#appendixapart7)
     - [Appendix A - Part 8: Find the difference of Duplicates](#appendixapart8)
+    - [Appendix A - Part 9: Find the Min and Max Length of a String and ordered alphabetically](#appendixapart9)
     
 ## <a name="chapter1"></a>Chapter 1: DuckDB Overview
 
@@ -332,3 +333,95 @@ SELECT COUNT(COUNTRYCODE) - COUNT(DISTINCT COUNTRYCODE) AS Difference FROM EXAMP
 └────────────┘
 
 ```
+
+ #### <a name="appendixapart9"></a>Appendix A - Part 9: Find the Min and Max Length of a String and ordered alphabetically
+
+```
+CREATE TABLE EXAMPLE (ID INTEGER,NAME VARCHAR(17),COUNTRYCODE VARCHAR(3), DISTRICT VARCHAR(20), POPULATION INTEGER);
+
+INSERT INTO EXAMPLE (ID, NAME, COUNTRYCODE, DISTRICT, POPULATION) VALUES
+(1, 'Abruzzo', 'IT', 'ABC', 100000),
+(2, 'Roma', 'IT', 'DEF', 99999),
+(3, 'Paris', 'FR', 'GHI', 100001),
+(4, 'Lima', 'PE', 'JKL', 101001);
+
+SELECT * FROM EXAMPLE;
+
+┌───────┬─────────┬─────────────┬──────────┬────────────┐
+│  ID   │  NAME   │ COUNTRYCODE │ DISTRICT │ POPULATION │
+│ int32 │ varchar │   varchar   │ varchar  │   int32    │
+├───────┼─────────┼─────────────┼──────────┼────────────┤
+│     1 │ Abruzzo │ IT          │ ABC      │     100000 │
+│     2 │ Roma    │ IT          │ DEF      │      99999 │
+│     3 │ Paris   │ FR          │ GHI      │     100001 │
+│     4 │ Lima    │ PE          │ JKL      │     101001 │
+└───────┴─────────┴─────────────┴──────────┴────────────┘
+
+WITH name_lengths AS (
+SELECT NAME, LENGTH(NAME) nameLength FROM EXAMPLE ORDER BY NAME
+),
+min_length AS (
+SELECT NAME, nameLength FROM name_lengths WHERE nameLength = (SELECT MIN(nameLength) FROM name_lengths) LIMIT 1
+),
+max_length AS (
+SELECT NAME, nameLength FROM name_lengths WHERE nameLength = (SELECT MAX(nameLength) FROM name_lengths) LIMIT 1
+),
+final_query AS (
+SELECT * FROM min_length
+UNION
+SELECT * FROM max_length
+)
+
+SELECT * FROM final_query ORDER BY NAME;
+
+┌─────────┬────────────┐
+│  NAME   │ nameLength │
+│ varchar │   int64    │
+├─────────┼────────────┤
+│ Abruzzo │          7 │
+│ Lima    │          4 │
+└─────────┴────────────┘
+```
+
+With inner Joins
+
+```
+CREATE TABLE EXAMPLE (ID INTEGER,NAME VARCHAR(17),COUNTRYCODE VARCHAR(3), DISTRICT VARCHAR(20), POPULATION INTEGER);
+
+INSERT INTO EXAMPLE (ID, NAME, COUNTRYCODE, DISTRICT, POPULATION) VALUES
+(1, 'Abruzzo', 'IT', 'ABC', 100000),
+(2, 'Roma', 'IT', 'DEF', 99999),
+(3, 'Paris', 'FR', 'GHI', 100001),
+(4, 'Lima', 'PE', 'JKL', 101001);
+
+SELECT * FROM EXAMPLE;
+
+┌───────┬─────────┬─────────────┬──────────┬────────────┐
+│  ID   │  NAME   │ COUNTRYCODE │ DISTRICT │ POPULATION │
+│ int32 │ varchar │   varchar   │ varchar  │   int32    │
+├───────┼─────────┼─────────────┼──────────┼────────────┤
+│     1 │ Abruzzo │ IT          │ ABC      │     100000 │
+│     2 │ Roma    │ IT          │ DEF      │      99999 │
+│     3 │ Paris   │ FR          │ GHI      │     100001 │
+│     4 │ Lima    │ PE          │ JKL      │     101001 │
+└───────┴─────────┴─────────────┴──────────┴────────────┘
+
+WITH name_lengths AS (
+SELECT NAME, LENGTH(NAME) nameLength FROM EXAMPLE ORDER BY NAME
+),
+min_length AS (
+SELECT NAME, nameLength FROM name_lengths WHERE nameLength = (SELECT MIN(nameLength) FROM name_lengths) LIMIT 1
+),
+max_length AS (
+SELECT NAME, nameLength FROM name_lengths WHERE nameLength = (SELECT MAX(nameLength) FROM name_lengths) LIMIT 1
+)
+
+SELECT nl.NAME, nl.nameLength
+FROM name_lengths nl
+INNER JOIN min_length minl
+ON minl.NAME = nl.NAME
+UNION
+SELECT nl.NAME, nl.nameLength
+FROM name_lengths nl
+INNER JOIN max_length maxl
+ON maxl.NAME = nl.NAME;
