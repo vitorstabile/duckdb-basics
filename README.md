@@ -16,6 +16,7 @@
     - [Appendix A - Part 9: Find the Min and Max Length of a String and ordered alphabetically](#appendixapart9)
     - [Appendix A - Part 10: Find Cities that starts with a,e,i,o or u](#appendixapart10)
     - [Appendix A - Part 11: Find Cities that starts and ends with a,e,i,o or u with regex](#appendixapart11)
+    - [Appendix A - Part 12: Find Cities that not starts and ends with a,e,i,o or u](#appendixapart12)
     
 ## <a name="chapter1"></a>Chapter 1: DuckDB Overview
 
@@ -507,5 +508,58 @@ SELECT DISTINCT NAME FROM EXAMPLE WHERE regexp_matches(NAME, '^(?:[aeiouAEIOU]|[
 │ varchar │
 ├─────────┤
 │ Abruzzo │
+└─────────┘
+```
+
+ #### <a name="appendixapart12"></a>Appendix A - Part 12: Find Cities that not starts and ends with a,e,i,o or u
+
+```
+CREATE TABLE EXAMPLE (ID INTEGER,NAME VARCHAR(17),COUNTRYCODE VARCHAR(3), DISTRICT VARCHAR(20), POPULATION INTEGER);
+
+INSERT INTO EXAMPLE (ID, NAME, COUNTRYCODE, DISTRICT, POPULATION) VALUES
+(1, 'Abruzzo', 'IT', 'ABC', 100000),
+(2, 'Roma', 'IT', 'DEF', 99999),
+(3, 'Paris', 'FR', 'GHI', 100001),
+(4, 'Lima', 'PE', 'JKL', 101001),
+(5, 'Abruzzo', 'IT', 'ABC', 100000),
+(6, 'Edinburgh', 'GB', 'MNO', 100000);
+
+SELECT * FROM EXAMPLE;
+
+┌───────┬───────────┬─────────────┬──────────┬────────────┐
+│  ID   │   NAME    │ COUNTRYCODE │ DISTRICT │ POPULATION │
+│ int32 │  varchar  │   varchar   │ varchar  │   int32    │
+├───────┼───────────┼─────────────┼──────────┼────────────┤
+│     1 │ Abruzzo   │ IT          │ ABC      │     100000 │
+│     2 │ Roma      │ IT          │ DEF      │      99999 │
+│     3 │ Paris     │ FR          │ GHI      │     100001 │
+│     4 │ Lima      │ PE          │ JKL      │     101001 │
+│     5 │ Abruzzo   │ IT          │ ABC      │     100000 │
+│     6 │ Edinburgh │ GB          │ MNO      │     100000 │
+└───────┴───────────┴─────────────┴──────────┴────────────┘
+
+SELECT DISTINCT NAME FROM EXAMPLE WHERE (LOWER(NAME) NOT LIKE 'a%' AND LOWER(NAME) NOT LIKE 'e%' AND LOWER(NAME) NOT LIKE 'i%' AND LOWER(NAME) NOT LIKE 'o%' AND LOWER(NAME) NOT LIKE 'u%') AND (LOWER(NAME) NOT LIKE '%a' AND LOWER(NAME) NOT LIKE '%e' AND LOWER(NAME) NOT LIKE '%i' AND LOWER(NAME) NOT LIKE '%o' AND LOWER(NAME) NOT LIKE '%u');
+
+┌─────────┐
+│  NAME   │
+│ varchar │
+├─────────┤
+│ Paris   │
+└─────────┘
+
+```
+
+COuld be
+
+```
+SELECT DISTINCT NAME FROM EXAMPLE WHERE (
+CASE WHEN LOWER(NAME) LIKE 'a%' OR LOWER(NAME) LIKE 'e%' OR LOWER(NAME) LIKE 'i%' OR LOWER(NAME) LIKE 'o%' OR LOWER(NAME) LIKE 'u%' THEN 1 ELSE 0 END +
+CASE WHEN LOWER(NAME) LIKE '%a' OR LOWER(NAME) LIKE '%e' OR LOWER(NAME) LIKE '%i' OR LOWER(NAME) LIKE '%o' OR LOWER(NAME) LIKE '%u' THEN 1 ELSE 0 END) = 0;
+
+┌─────────┐
+│  NAME   │
+│ varchar │
+├─────────┤
+│ Paris   │
 └─────────┘
 ```
