@@ -12,6 +12,7 @@
     - [Appendix A - Part 5: Split a field and create new columns](#appendixapart5)
     - [Appendix A - Part 6: Split a field and aggregate values](#appendixapart6)
     - [Appendix A - Part 7: Select just even numbers](#appendixapart7)
+    - [Appendix A - Part 8: Find the difference of Duplicates](#appendixapart8)
     
 ## <a name="chapter1"></a>Chapter 1: DuckDB Overview
 
@@ -307,3 +308,19 @@ SELECT DISTINCT
 ├───────┼─────────┼─────────────┼──────────┼────────────┤
 │   2   │ BB      │ DE          │ DEF      │   99999    │
 └───────┴─────────┴─────────────┴──────────┴────────────┘
+```
+
+ #### <a name="appendixapart8"></a>Appendix A - Part 8: Find the difference of Duplicate Values
+
+ Find the difference between the total number of COUNTRYCODE entries in the table and the number of distinct COUNTRYCODE entries in the table
+
+ ```
+CREATE TABLE EXAMPLE (ID INTEGER,NAME VARCHAR(17),COUNTRYCODE VARCHAR(3), DISTRICT VARCHAR(20), POPULATION INTEGER);
+
+INSERT INTO EXAMPLE (ID, NAME, COUNTRYCODE, DISTRICT, POPULATION) VALUES
+(1, 'AA', 'IT', 'ABC', 100000),
+(2, 'BB', 'IT', 'DEF', 99999),
+(3, 'CC', 'FR', 'GHI', 100001);
+
+SELECT COUNT(COUNTRYCODE) - COUNT(DISTINCT COUNTRYCODE) AS Difference FROM EXAMPLE;
+```
