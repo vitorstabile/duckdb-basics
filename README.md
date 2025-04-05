@@ -11,6 +11,7 @@
     - [Appendix A - Part 4: Find a character in a VARCHAR field](#appendixapart4)
     - [Appendix A - Part 5: Split a field and create new columns](#appendixapart5)
     - [Appendix A - Part 6: Split a field and aggregate values](#appendixapart6)
+    - [Appendix A - Part 7: Select just even numbers](#appendixapart7)
     
 ## <a name="chapter1"></a>Chapter 1: DuckDB Overview
 
@@ -227,7 +228,7 @@ WITH pairs AS (
 └────────────┴─────────┴───────────────┴───────────┘
 ```
 
- #### <a name="appendixapart5"></a>Appendix A - Part 6: Split a field and aggregate values
+ #### <a name="appendixapart6"></a>Appendix A - Part 6: Split a field and aggregate values
 
  ```
 CREATE TABLE products (sku VARCHAR(10),price DECIMAL(10,2), size VARCHAR(10));
@@ -268,3 +269,41 @@ GROUP BY
 │         20.00 │ AA|L_M_S   │
 └───────────────┴────────────┘
 ```
+
+ #### <a name="appendixapart7"></a>Appendix A - Part 7: Split a field and aggregate values
+
+```
+CREATE TABLE EXAMPLE (ID INTEGER,NAME VARCHAR(17),COUNTRYCODE VARCHAR(3), DISTRICT VARCHAR(20), POPULATION INTEGER);
+
+INSERT INTO EXAMPLE (ID, NAME, COUNTRYCODE, DISTRICT, POPULATION) VALUES
+  (1, 'AA', 'IT', 'ABC', 100000),
+  (2, 'BB', 'DE', 'DEF', 99999),
+  (3, 'CC', 'FR', 'GHI', 100001);
+
+SELECT * FROM EXAMPLE;
+
+┌───────┬─────────┬─────────────┬──────────┬────────────┐
+│  ID   │  NAME   │ COUNTRYCODE │ DISTRICT │ POPULATION │
+│ int32 │ varchar │   varchar   │ varchar  │   int32    │
+├───────┼─────────┼─────────────┼──────────┼────────────┤
+│     1 │ AA      │ IT          │ ABC      │     100000 │
+│     2 │ BB      │ DE          │ DEF      │      99999 │
+│     3 │ CC      │ FR          │ GHI      │     100001 │
+└───────┴─────────┴─────────────┴──────────┴────────────┘
+
+SELECT DISTINCT
+      *
+      FROM EXAMPLE
+      WHERE
+      CASE
+          WHEN MOD(ID,2) = 0
+          THEN 1
+          ELSE 0
+      END;
+
+┌───────┬─────────┬─────────────┬──────────┬────────────┐
+│  ID   │  NAME   │ COUNTRYCODE │ DISTRICT │ POPULATION │
+│ int32 │ varchar │   varchar   │ varchar  │   int32    │
+├───────┼─────────┼─────────────┼──────────┼────────────┤
+│   2   │ BB      │ DE          │ DEF      │   99999    │
+└───────┴─────────┴─────────────┴──────────┴────────────┘
