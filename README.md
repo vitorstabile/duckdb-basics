@@ -14,6 +14,7 @@
     - [Appendix A - Part 7: Select just even numbers](#appendixapart7)
     - [Appendix A - Part 8: Find the difference of Duplicates](#appendixapart8)
     - [Appendix A - Part 9: Find the Min and Max Length of a String and ordered alphabetically](#appendixapart9)
+    - [Appendix A - Part 10: Find Cities that starts with a,e,i,o or u](#appendixapart10)
     
 ## <a name="chapter1"></a>Chapter 1: DuckDB Overview
 
@@ -425,3 +426,39 @@ SELECT nl.NAME, nl.nameLength
 FROM name_lengths nl
 INNER JOIN max_length maxl
 ON maxl.NAME = nl.NAME;
+```
+
+ #### <a name="appendixapart10"></a>Appendix A - Part 10: Find Cities that starts with a,e,i,o or u
+
+```
+CREATE TABLE EXAMPLE (ID INTEGER,NAME VARCHAR(17),COUNTRYCODE VARCHAR(3), DISTRICT VARCHAR(20), POPULATION INTEGER);
+
+INSERT INTO EXAMPLE (ID, NAME, COUNTRYCODE, DISTRICT, POPULATION) VALUES
+(1, 'Abruzzo', 'IT', 'ABC', 100000),
+(2, 'Roma', 'IT', 'DEF', 99999),
+(3, 'Paris', 'FR', 'GHI', 100001),
+(4, 'Lima', 'PE', 'JKL', 101001),
+(5, 'Abruzzo', 'IT', 'ABC', 100000),
+(6, 'Edinburgh', 'GB', 'MNO', 100000);
+
+SELECT * FROM EXAMPLE;
+
+┌───────┬───────────┬─────────────┬──────────┬────────────┐
+│  ID   │   NAME    │ COUNTRYCODE │ DISTRICT │ POPULATION │
+│ int32 │  varchar  │   varchar   │ varchar  │   int32    │
+├───────┼───────────┼─────────────┼──────────┼────────────┤
+│     1 │ Abruzzo   │ IT          │ ABC      │     100000 │
+│     2 │ Roma      │ IT          │ DEF      │      99999 │
+│     3 │ Paris     │ FR          │ GHI      │     100001 │
+│     4 │ Lima      │ PE          │ JKL      │     101001 │
+│     5 │ Abruzzo   │ IT          │ ABC      │     100000 │
+│     6 │ Edinburgh │ GB          │ MNO      │     100000 │
+└───────┴───────────┴─────────────┴──────────┴────────────┘
+
+SELECT DISTINCT NAME FROM EXAMPLE WHERE 
+LOWER(NAME) LIKE 'a%' OR 
+LOWER(NAME) LIKE 'e%' OR 
+LOWER(NAME) LIKE 'i%' OR
+LOWER(NAME) LIKE 'o%' OR
+LOWER(NAME) LIKE 'u%';
+```
