@@ -461,4 +461,13 @@ LOWER(NAME) LIKE 'e%' OR
 LOWER(NAME) LIKE 'i%' OR
 LOWER(NAME) LIKE 'o%' OR
 LOWER(NAME) LIKE 'u%';
+
+┌───────────┐
+│   NAME    │
+│  varchar  │
+├───────────┤
+│ Abruzzo   │
+│ Edinburgh │
+└───────────┘
+
 ```
