@@ -17,6 +17,7 @@
     - [Appendix A - Part 10: Find Cities that starts with a,e,i,o or u](#appendixapart10)
     - [Appendix A - Part 11: Find Cities that starts and ends with a,e,i,o or u with regex](#appendixapart11)
     - [Appendix A - Part 12: Find Cities that not starts and ends with a,e,i,o or u](#appendixapart12)
+    - [Appendix A - Part 13: Using more than One order By](#appendixapart13)
     
 ## <a name="chapter1"></a>Chapter 1: DuckDB Overview
 
@@ -562,4 +563,48 @@ CASE WHEN LOWER(NAME) LIKE '%a' OR LOWER(NAME) LIKE '%e' OR LOWER(NAME) LIKE '%i
 ├─────────┤
 │ Paris   │
 └─────────┘
+```
+
+ #### <a name="appendixapart13"></a>Appendix A - Part 13: Using more than One order By
+
+```
+CREATE TABLE STUDENTS (ID INTEGER,Name VARCHAR(17),Marks INTEGER);
+
+INSERT INTO STUDENTS (ID, Name, Marks) VALUES
+(1, 'Ashley',81),
+(2, 'Samantha', 75),
+(3, 'Julia', 76),
+(4, 'Belvet', 74),
+(5, 'Bobby', 88),
+(6, 'Robby', 90);
+
+SELECT * FROM STUDENTS;
+
+┌───────┬──────────┬───────┐
+│  ID   │   Name   │ Marks │
+│ int32 │ varchar  │ int32 │
+├───────┼──────────┼───────┤
+│     1 │ Ashley   │    81 │
+│     2 │ Samantha │    75 │
+│     3 │ Julia    │    76 │
+│     4 │ Belvet   │    74 │
+│     5 │ Bobby    │    88 │
+│     6 │ Robby    │    90 │
+└───────┴──────────┴───────┘
+
+SELECT Name
+FROM STUDENTS
+WHERE Marks > 75
+ORDER BY RIGHT(Name, 3) ASC, ID ASC;
+
+┌─────────┐
+│  Name   │
+│ varchar │
+├─────────┤
+│ Bobby   │
+│ Robby   │
+│ Ashley  │
+│ Julia   │
+└─────────┘
+
 ```
