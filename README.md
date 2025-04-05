@@ -323,4 +323,12 @@ INSERT INTO EXAMPLE (ID, NAME, COUNTRYCODE, DISTRICT, POPULATION) VALUES
 (3, 'CC', 'FR', 'GHI', 100001);
 
 SELECT COUNT(COUNTRYCODE) - COUNT(DISTINCT COUNTRYCODE) AS Difference FROM EXAMPLE;
+
+┌────────────┐
+│ Difference │
+│   int64    │
+├────────────┤
+│     1      │
+└────────────┘
+
 ```
