@@ -15,6 +15,7 @@
     - [Appendix A - Part 8: Find the difference of Duplicates](#appendixapart8)
     - [Appendix A - Part 9: Find the Min and Max Length of a String and ordered alphabetically](#appendixapart9)
     - [Appendix A - Part 10: Find Cities that starts with a,e,i,o or u](#appendixapart10)
+    - [Appendix A - Part 11: Find Cities that starts and ends with a,e,i,o or u with regex](#appendixapart11)
     
 ## <a name="chapter1"></a>Chapter 1: DuckDB Overview
 
@@ -470,4 +471,41 @@ LOWER(NAME) LIKE 'u%';
 │ Edinburgh │
 └───────────┘
 
+```
+
+ #### <a name="appendixapart11"></a>Appendix A - Part 11: Find Cities that starts and ends with a,e,i,o or u with regex
+
+```
+CREATE TABLE EXAMPLE (ID INTEGER,NAME VARCHAR(17),COUNTRYCODE VARCHAR(3), DISTRICT VARCHAR(20), POPULATION INTEGER);
+
+INSERT INTO EXAMPLE (ID, NAME, COUNTRYCODE, DISTRICT, POPULATION) VALUES
+(1, 'Abruzzo', 'IT', 'ABC', 100000),
+(2, 'Roma', 'IT', 'DEF', 99999),
+(3, 'Paris', 'FR', 'GHI', 100001),
+(4, 'Lima', 'PE', 'JKL', 101001),
+(5, 'Abruzzo', 'IT', 'ABC', 100000),
+(6, 'Edinburgh', 'GB', 'MNO', 100000);
+
+SELECT * FROM EXAMPLE;
+
+┌───────┬───────────┬─────────────┬──────────┬────────────┐
+│  ID   │   NAME    │ COUNTRYCODE │ DISTRICT │ POPULATION │
+│ int32 │  varchar  │   varchar   │ varchar  │   int32    │
+├───────┼───────────┼─────────────┼──────────┼────────────┤
+│     1 │ Abruzzo   │ IT          │ ABC      │     100000 │
+│     2 │ Roma      │ IT          │ DEF      │      99999 │
+│     3 │ Paris     │ FR          │ GHI      │     100001 │
+│     4 │ Lima      │ PE          │ JKL      │     101001 │
+│     5 │ Abruzzo   │ IT          │ ABC      │     100000 │
+│     6 │ Edinburgh │ GB          │ MNO      │     100000 │
+└───────┴───────────┴─────────────┴──────────┴────────────┘
+
+SELECT DISTINCT NAME FROM EXAMPLE WHERE regexp_matches(NAME, '^(?:[aeiouAEIOU]|[aeiouAEIOU].*[aeiouAEIOU])$');
+
+┌─────────┐
+│  NAME   │
+│ varchar │
+├─────────┤
+│ Abruzzo │
+└─────────┘
 ```
